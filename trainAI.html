@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Help Train Our AI</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+        }
+
+        body {
+            background: #010101;
+            color: #fff;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 40px 20px;
+        }
+
+        .training-section {
+            width: 80%;
+            /* max-width: 1000px; */
+        }
+
+        /* Header */
+        .section-header {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+
+        .section-title {
+            font-size: 2.5rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 16px;
+            background: linear-gradient(to left, #5C3DF3,#DD0D49);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .section-description {
+            color: #aaa;
+            font-size: 1.1rem;
+            max-width: 600px;
+            margin: 12px auto 0;
+            line-height: 1.6;
+        }
+
+        /* Container */
+        .training-container {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 30px;
+        }
+
+        @media (max-width: 768px) {
+            .training-container {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Cards */
+        .training-card {
+            position: relative;
+            background: #111;
+            border-radius: 20px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+            padding: 2px;
+        }
+
+        .training-card::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: 24px;
+            padding: 2px;
+            background: linear-gradient(135deg, #222,#222,#222, #5b3df367, #dd0d4864,#222,#222,#222);
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: destination-out;
+            mask-composite: exclude;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .card-inner {
+            position: relative;
+            z-index: 1;
+            background: #111;
+            border-radius: 18px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            padding: 24px;
+        }
+
+        .card-header {
+            margin-bottom: 20px;
+        }
+
+        .card-title {
+            font-size: 1.4em;
+            font-weight: 500;
+            background: linear-gradient(90deg, #5C3DF3, #DD0D49);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .card-description {
+            color: #aaa;
+            font-size: 0.9rem;
+            margin-top: 6px;
+        }
+
+        .input-group {
+            margin-bottom: 18px;
+        }
+
+        .input-label {
+            font-size: 0.9rem;
+            font-weight: 300;
+            margin-bottom: 12px;
+            color: #ccc;
+            display: block;
+        }
+
+        .input-field {
+            width: 100%;
+            padding: 14px 16px;
+            border-radius: 12px;
+            border: 1px solid #555;
+            background: #010101;
+            color: #fff;
+            font-size: .9rem;
+            transition: all 0.3s;
+        }
+
+        .input-field:focus {
+            outline: none;
+            border-color: #fff;
+        }
+
+        textarea.input-field {
+            min-height: 120px;
+            resize: vertical;
+        }
+
+        .submit-button {
+            color: #fff;
+            margin-top: auto;
+            padding: 14px 24px;
+            border-radius: 12px;
+            border: none;
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            background: linear-gradient(120deg, #5C3DF3, #DD0D49);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .submit-button:hover {
+            transform: translateY(-2px);
+        }
+
+        .submit-button:disabled {
+            background: #333;
+            cursor: not-allowed;
+        }
+
+        .ai-response {
+            flex: 1;
+            background: #000000;
+            border-radius: 14px;
+            border: 1px solid #222;
+            display: flex;
+            flex-direction: column;
+            padding: 20px;
+            color: #ccc;
+        }
+
+        .response-placeholder {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+        }
+
+        .response-placeholder i {
+            font-size: 2.2rem;
+            margin-bottom: 14px;
+            opacity: .5;
+            color: #ffffff;
+        }
+
+        .response-content {
+            color: #ccc;
+            line-height: 1.6;
+        }
+
+        .generating {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            padding: 20px;
+            color: #aaa;
+        }
+
+        .spinner {
+            width: 24px;
+            height: 24px;
+            border: 3px solid #333;
+            border-top: 3px solid #5C3DF3;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <section class="training-section">
+        <div class="section-header">
+            <h2 class="section-title"><i class="fas fa-brain"></i>Help Train Our AI</h2>
+            <p class="section-description">Share your insights and see personalized AI-generated content</p>
+        </div>
+
+        <div class="training-container">
+            <!-- Input Card -->
+            <div class="training-card">
+                <div class="card-inner">
+                    <div class="card-header">
+                        <h3 class="card-title">Your Input</h3>
+                        <p class="card-description">Tell us about your interests and challenges</p>
+                    </div>
+                    <div class="input-group">
+                        <label class="input-label">Main area of interest</label>
+                        <input type="text" class="input-field" id="user-interest"
+                            placeholder="e.g., Marketing, Development...">
+                    </div>
+                    <div class="input-group">
+                        <label class="input-label">Challenge or idea</label>
+                        <textarea class="input-field" id="training-input"
+                            placeholder="Describe what AI can help with..."></textarea>
+                    </div>
+                    <button class="submit-button" id="generate-button"><i class="fas fa-bolt"></i>Generate AI
+                        Response</button>
+                </div>
+            </div>
+
+            <!-- Output Card -->
+            <div class="training-card">
+                <div class="card-inner">
+                    <div class="card-header">
+                        <h3 class="card-title">AI-Generated Insight</h3>
+                        <p class="card-description">Personalized content based on your input</p>
+                    </div>
+                    <div class="ai-response" id="ai-response">
+                        <div class="response-placeholder">
+                            <i class="fas fa-robot"></i>
+                            <p>Share your input to see AI-generated insights</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        const userInterestInput = document.getElementById('user-interest');
+        const trainingInput = document.getElementById('training-input');
+        const generateButton = document.getElementById('generate-button');
+        const aiResponseContainer = document.getElementById('ai-response');
+
+        function updateButtonState() {
+            const hasInterest = userInterestInput.value.trim() !== '';
+            const hasInput = trainingInput.value.trim() !== '';
+            generateButton.disabled = !hasInterest || !hasInput;
+        }
+
+        function showGenerating() {
+            aiResponseContainer.innerHTML = `<div class="generating"><div class="spinner"></div><span>Generating AI response...</span></div>`;
+        }
+
+        function showResponse(response) {
+            aiResponseContainer.innerHTML = `<div class="response-content"><p>${response}</p></div>`;
+        }
+
+        function handleSubmit() {
+            const interest = userInterestInput.value.trim();
+            const input = trainingInput.value.trim();
+            if (!interest || !input) return;
+            showGenerating();
+            setTimeout(() => {
+                const templates = [
+                    `Based on your interest in ${interest}, here's a personalized insight: "${input}" shows great potential for AI automation.`,
+                    `Your input about ${interest} reveals opportunities for enhanced productivity and smart recommendations.`,
+                    `We're training our AI to understand "${input}" for better solutions tailored to your needs.`,
+                ];
+                const randomTemplate = templates[Math.floor(Math.random() * templates.length)];
+                showResponse(randomTemplate);
+            }, 2000);
+        }
+
+        userInterestInput.addEventListener('input', updateButtonState);
+        trainingInput.addEventListener('input', updateButtonState);
+        generateButton.addEventListener('click', handleSubmit);
+        updateButtonState();
+    </script>
+</body>
+
+</html>

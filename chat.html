@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Minimal AI Chat in iPad</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    body {
+      background: #010101;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+      font-family: 'Inter', sans-serif;
+    }
+
+    .mockup-section {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      /* padding:2rem; */
+      border-radius: 20px;
+    }
+
+    .mockup-wrapper {
+      position: relative;
+      width: 620px;
+      /* size control */
+    }
+
+    .mockup-img {
+      width: 100%;
+      height: auto;
+      transform: rotate(-90deg);
+      display: block;
+      border-radius: 12px;
+    }
+
+    /* Chat positioned to exact iPad screen */
+    .chat-wrapper {
+      position: absolute;
+      top: 16%;
+      left: -10%;
+      width: 120%;
+      height: 69%;
+      /* background:#1a1a1a; */
+      border-radius: 12px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      font-size: 12px;
+    }
+
+    .chat-header {
+      padding: 10px 14px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: #fff;
+      background: rgba(255, 255, 255, 0.02);
+    }
+
+    .ai-avatar {
+      width: 28px;
+      height: 28px;
+      border-radius: 8px;
+      background: linear-gradient(135deg, #5C3DF3, #DD0D49);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 12px;
+      color: #fff;
+    }
+
+    .ai-name {
+      font-weight: 600;
+      font-size: 13px;
+    }
+
+    .ai-status {
+      margin-left: auto;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 11px;
+      color: #5C3DF3;
+    }
+
+    .status-dot {
+      width: 5px;
+      height: 5px;
+      border-radius: 50%;
+      background: #5C3DF3;
+    }
+
+    .messages {
+      flex: 1;
+      padding: 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      overflow-y: auto;
+      color: #fff;
+      background: rgba(255, 255, 255, 0.01);
+    }
+
+    .messages::-webkit-scrollbar {
+      width: 4px;
+    }
+
+    .messages::-webkit-scrollbar-thumb {
+      background: #5C3DF3;
+      border-radius: 2px;
+    }
+
+    .message {
+      max-width: 70%;
+      padding: 8px 12px;
+      border-radius: 12px;
+      font-size: 12px;
+      line-height: 1.4;
+    }
+
+    .ai-message {
+      align-self: flex-start;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .user-message {
+      align-self: flex-end;
+      background: linear-gradient(135deg, #5C3DF3, #DD0D49);
+      color: #fff;
+    }
+
+    .message-time {
+      font-size: 9px;
+      opacity: 0.6;
+      margin-top: 2px;
+      display: block;
+    }
+
+    .input-area {
+      padding: 8px 10px;
+      border-top: 1px solid rgba(255, 255, 255, 0.05);
+      display: flex;
+      gap: 8px;
+      background: rgba(255, 255, 255, 0.02);
+    }
+
+    .chat-input {
+      flex: 1;
+      padding: 8px 10px;
+      background: rgba(255, 255, 255, 0.04);
+      border-radius: 10px;
+      border: 1px solid rgba(255, 255, 255, 0.07);
+      color: #fff;
+      font-size: 12px;
+    }
+
+    .chat-input:focus {
+      outline: none;
+      border-color: #5C3DF3;
+    }
+
+    .chat-input::placeholder {
+      color: #888;
+    }
+
+    .send-button {
+      width: 34px;
+      height: 34px;
+      border-radius: 8px;
+      background: linear-gradient(135deg, #5C3DF3, #DD0D49);
+      border: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-size: 12px;
+      color: #fff;
+      transition: 0.2s;
+    }
+
+    .send-button:hover {
+      transform: scale(1.05);
+    }
+  </style>
+</head>
+
+<body>
+  <section class="mockup-section">
+    <div class="mockup-wrapper">
+      <img src="ipad2.png" alt="iPad Mockup" class="mockup-img">
+      <!-- Chat UI -->
+      <div class="chat-wrapper">
+        <div class="chat-header">
+          <div class="ai-avatar"><i class="fas fa-robot"></i></div>
+          <div class="ai-name">AI Assistant</div>
+          <div class="ai-status">
+            <div class="status-dot"></div><span>Online</span>
+          </div>
+        </div>
+        <div class="messages" id="messages"></div>
+        <div class="input-area">
+          <input type="text" id="chat-input" class="chat-input" placeholder="Type your message..." autocomplete="off">
+          <button class="send-button" id="send-button"><i class="fas fa-paper-plane"></i></button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <script>
+    const chatInput = document.getElementById('chat-input');
+    const sendButton = document.getElementById('send-button');
+    const messagesContainer = document.getElementById('messages');
+
+    const chatHistory = [{ type: 'ai', message: "Hello, I'm your AI assistant. How can I help you today?", time: new Date() }];
+
+    function formatTime(date) { return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }); }
+    function updateChatDisplay() {
+      messagesContainer.innerHTML = '';
+      chatHistory.forEach(chat => {
+        const msgDiv = document.createElement('div');
+        msgDiv.className = `message ${chat.type}-message`;
+        msgDiv.textContent = chat.message;
+        const timeSpan = document.createElement('span');
+        timeSpan.className = 'message-time';
+        timeSpan.textContent = formatTime(chat.time);
+        msgDiv.appendChild(timeSpan);
+        messagesContainer.appendChild(msgDiv);
+      });
+      messagesContainer.scrollTop = messagesContainer.scrollHeight;
+    }
+    function handleSubmit() {
+      const message = chatInput.value.trim(); if (!message) return;
+      chatHistory.push({ type: 'user', message, time: new Date() });
+      updateChatDisplay();
+      chatInput.value = '';
+      setTimeout(() => {
+        const responses = [
+          "I understand what you're asking. Let me provide some insights.",
+          "That's an interesting point. Based on my knowledge, I'd suggest...",
+          "Thanks for sharing. I can help you explore this further."
+        ];
+        const reply = responses[Math.floor(Math.random() * responses.length)];
+        chatHistory.push({ type: 'ai', message: reply, time: new Date() });
+        updateChatDisplay();
+      }, 1200 + Math.random() * 800);
+    }
+    sendButton.addEventListener('click', handleSubmit);
+    chatInput.addEventListener('keypress', e => { if (e.key === 'Enter') handleSubmit(); });
+    updateChatDisplay();
+  </script>
+</body>
+
+</html>

@@ -1,0 +1,1101 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI Challenge Arena</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    body {
+      background: #010101;
+      color: #fff;
+      min-height: 100vh;
+      padding: 1.5rem;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .arena-container {
+      width: 100%;
+      max-width: 1200px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2rem;
+      padding: 2rem;
+      backdrop-filter: blur(10px);
+      border-radius: 20px;
+      z-index: 1;
+
+      background: #0d0d0d;
+      box-shadow:
+        inset 0 8px 20px rgba(255, 255, 255, 0.09),
+        inset 0 -8px 20px rgba(22, 22, 22, 0.6),
+        0 10px 25px rgba(0, 0, 0, 0.6);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+
+
+    .panel {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .left-panel {
+      border-right: 1px solid rgba(255, 255, 255, 0.2);
+      padding-right: 2rem;
+    }
+
+
+    /* Header Section */
+    .panel-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.5rem;
+    }
+
+    .panel-title {
+      font-size: 1.4rem;
+      font-weight: 400;
+      color: white;
+    }
+
+    .stats-container {
+      display: flex;
+      gap: 0.8rem;
+    }
+
+    .stat-box {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 0.2rem 0.8rem;
+      border-radius: 12px;
+      /* background: rgb(52, 52, 52); */
+      border: 1px solid #222;
+      min-width: 70px;
+    }
+
+    .stat-value {
+      font-size: 1.1rem;
+      font-weight: 400;
+      /* margin-bottom: 0.2rem; */
+      color: #fff;
+      display: flex;
+      align-items: center;
+      gap: 0.3rem;
+    }
+
+    .stat-value i {
+      font-size: .8rem;
+      color: #5b3df3de;
+    }
+
+    .stat-label {
+      color: #aaa;
+      font-size: 0.7rem;
+      font-weight: 500;
+    }
+
+    /* Categories Section */
+    .categories-container {
+      margin-bottom: 1.5rem;
+    }
+
+    .categories-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 0.8rem;
+      margin-bottom: 1rem;
+    }
+
+    .category-btn {
+      padding: 1.2rem 0.5rem;
+      background: #1f1f1f;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 10px;
+      color: #ccc;
+      font-family: inherit;
+      font-size: 0.8rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.4rem;
+    }
+
+    .category-btn i {
+      font-size: 0.9rem;
+      transition: all 0.3s ease;
+    }
+
+    .category-btn:hover {
+      color: #fff;
+      border-color: rgba(255, 255, 255, 0.15);
+      transform: translateY(-2px);
+    }
+
+    .category-btn.active {
+      background: linear-gradient(to bottom, #5b3df37d, #5b3df381, #dd0d487f);
+      color: #fff;
+      border: 1px solid #aaa;
+    }
+
+    .category-btn.active i {
+      color: #fff;
+    }
+
+    .category-info {
+      /* padding: 0.8rem; */
+      font-size: 0.75rem;
+      padding-bottom: 1rem;
+      color: #aaa;
+      border-radius: 8px;
+      /* background: rgba(31, 31, 31, 0.5); */
+      text-align: left;
+    }
+
+    /* Challenge Input */
+    .challenge-input {
+      margin-bottom: 1rem;
+    }
+
+    textarea {
+      width: 100%;
+      min-height: 150px;
+      padding: 1rem;
+      background: #1f1f1f;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 10px;
+      color: #eee;
+      font-family: inherit;
+      font-size: 0.85rem;
+      resize: vertical;
+      transition: all 0.3s ease;
+    }
+
+    textarea:focus {
+      outline: none;
+      border-color: rgba(255, 255, 255, 0.5);
+    }
+
+    textarea::placeholder {
+      color: #666;
+    }
+
+    .action-buttons {
+      display: flex;
+      gap: 0.8rem;
+    }
+
+    .submit-btn,
+    .share-btn {
+      flex: 1;
+      padding: 0.8rem 1.2rem;
+      border-radius: 10px;
+      font-weight: 600;
+      font-size: 0.85rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+    }
+
+    .submit-btn {
+      background: linear-gradient(to right, #5C3DF3, #DD0D49);
+      color: white;
+      border: none;
+    }
+
+    .submit-btn:hover:not(:disabled) {
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(92, 61, 243, 0.3);
+    }
+
+    .submit-btn:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+
+    .share-btn {
+      background: rgba(31, 31, 31, 0.7);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      color: #ccc;
+    }
+
+    .share-btn:hover:not(:disabled) {
+      color: #fff;
+      border-color: rgba(255, 255, 255, 0.2);
+    }
+
+    .share-btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    /* Right Panel Styles */
+    .arena-ai-response {
+      padding: 1.2rem;
+      /* border: 1px solid rgba(255, 255, 255, 0.1); */
+      border-radius: 10px;
+      margin-bottom: .5rem;
+      /* background: rgba(31, 31, 31, 0.5); */
+    }
+
+    .response-header {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      margin-bottom: 0.8rem;
+    }
+
+    .response-header i {
+      font-size: 1rem;
+      background: linear-gradient(120deg, #5C3DF3, #DD0D49);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .response-title {
+      font-weight: 500;
+      font-size: 1rem;
+      color: #eee;
+    }
+
+    .response-content {
+      color: #ccc;
+      line-height: 1.5;
+      font-size: 0.8rem;
+    }
+
+    .achievements-section {
+      padding: 1.2rem;
+      /* border: 1px solid rgba(255, 255, 255, 0.08); */
+      border-radius: 10px;
+      margin-bottom: 1.2rem;
+      /* background: rgba(31, 31, 31, 0.5); */
+    }
+
+    .section-header {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      margin-bottom: 0.8rem;
+    }
+
+    .section-header i {
+      font-size: 1rem;
+      background: linear-gradient(120deg, #5C3DF3, #DD0D49);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .section-title {
+      font-weight: 500;
+      color: #eee;
+      font-size: 0.9rem;
+    }
+
+    .achievements-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 0.6rem;
+    }
+
+    .achievement-item {
+      padding: .8rem 0.5rem;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 8px;
+      text-align: center;
+      background: #1f1f1f;
+    }
+
+    .achievement-item i {
+      color: #fff;
+      font-size: 0.7rem;
+      margin-bottom: 0.3rem;
+    }
+
+    .achievement-name {
+      font-size: 0.8rem;
+      color: #ccc;
+    }
+
+    .leaderboard-section {
+      padding: 1.2rem;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 10px;
+      background: #1f1f1f;
+    }
+
+    .leaderboard-item {
+      display: flex;
+      justify-content: space-between;
+      padding: 0.6rem 0;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      color: #ccc;
+      font-size: .8rem;
+    }
+
+    .leaderboard-item:last-child {
+      border-bottom: none;
+    }
+
+    .user-item {
+      background: rgba(255, 255, 255, 0.05);
+      margin: 0 -1.2rem;
+      padding: 0.6rem 1.2rem;
+      border-left: 2px solid #fff;
+    }
+
+    /* Share Modal Styles */
+    .share-modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.8);
+      backdrop-filter: blur(5px);
+      z-index: 1000;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .share-modal-content {
+      background: linear-gradient(135deg, #1a1a1a, #2d2d2d);
+      border-radius: 16px;
+      padding: 1.8rem;
+      width: 90%;
+      max-width: 450px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .share-modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.2rem;
+    }
+
+    .share-modal-title {
+      font-size: 1.3rem;
+      font-weight: 600;
+      background: linear-gradient(90deg, #5C3DF3, #DD0D49);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .close-modal {
+      background: none;
+      border: none;
+      color: #ccc;
+      font-size: 1.5rem;
+      cursor: pointer;
+      transition: color 0.3s;
+    }
+
+    .close-modal:hover {
+      color: #fff;
+    }
+
+    .share-stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 0.8rem;
+      margin-bottom: 1.2rem;
+    }
+
+    .stat-card {
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 10px;
+      padding: 0.8rem;
+      text-align: center;
+    }
+
+    .stat-value-modal {
+      font-size: 1.2rem;
+      font-weight: 700;
+      margin-bottom: 0.3rem;
+      color: #fff;
+    }
+
+    .stat-label-modal {
+      font-size: 0.7rem;
+      color: #ccc;
+    }
+
+    .share-platforms {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 0.8rem;
+      margin-bottom: 1.2rem;
+    }
+
+    .platform-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.4rem;
+      padding: 0.8rem;
+      border-radius: 10px;
+      border: none;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s;
+      font-size: 0.8rem;
+    }
+
+    .twitter {
+      background: #1DA1F2;
+      color: white;
+    }
+
+    .facebook {
+      background: #3b5998;
+      color: white;
+    }
+
+    .linkedin {
+      background: #0077B5;
+      color: white;
+    }
+
+    .copy-link {
+      background: #5C3DF3;
+      color: white;
+    }
+
+    .platform-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    /* ==================== RESPONSIVE MEDIA QUERIES ==================== */
+
+    /* For tablets and medium screens */
+    @media (max-width: 1024px) {
+      .arena-container {
+        padding: 1.5rem;
+        gap: 1.5rem;
+      }
+
+      .categories-grid {
+        grid-template-columns: repeat(4, 1fr);
+      }
+
+      .achievements-grid {
+        grid-template-columns: repeat(4, 1fr);
+      }
+    }
+
+    @media (max-width: 900px) {
+      .arena-container {
+        grid-template-columns: 1fr;
+        padding: 1.5rem;
+        gap: 1.5rem;
+      }
+
+      .left-panel {
+        border-right: none;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        padding-right: 0;
+        padding-bottom: 1.5rem;
+      }
+    }
+
+    /* For tablets in portrait and large phones */
+    @media (max-width: 768px) {
+      body {
+        padding: 1rem;
+      }
+
+      .arena-container {
+        padding: 1.2rem;
+        gap: 1.2rem;
+      }
+
+      .panel-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1rem;
+        margin-bottom: 1.2rem;
+      }
+
+      .stats-container {
+        width: 100%;
+        justify-content: space-between;
+      }
+
+      .stat-box {
+        flex: 1;
+        min-width: auto;
+      }
+
+      .action-buttons {
+        flex-direction: column;
+      }
+
+      .left-panel {
+        padding-right: 0;
+      }
+
+      .category-btn {
+        padding: 1rem 0.5rem;
+        font-size: 0.75rem;
+      }
+
+      .leaderboard-section,
+      .achievements-section,
+      .arena-ai-response {
+        padding: 1rem;
+      }
+    }
+
+    /* For mobile devices */
+    @media (max-width: 480px) {
+      body {
+        padding: 0.5rem;
+        display: block;
+      }
+
+      .arena-container {
+        padding: 1rem;
+        border-radius: 16px;
+        margin: 0.5rem 0;
+      }
+
+      .panel-title {
+        font-size: 1.2rem;
+      }
+
+      .categories-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .achievements-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .category-btn {
+        flex-direction: row;
+        justify-content: flex-start;
+        padding: 0.8rem;
+        text-align: left;
+      }
+
+      .category-btn i {
+        margin-right: 0.5rem;
+      }
+
+      .stat-value {
+        font-size: 1rem;
+      }
+
+      .response-header,
+      .section-header {
+        margin-bottom: 0.6rem;
+      }
+
+      .response-title,
+      .section-title {
+        font-size: 0.9rem;
+      }
+/* 
+      .achievements-grid {
+        grid-template-columns: 1fr;
+      } */
+
+      .achievement-item {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        text-align: left;
+      }
+
+      .achievement-item i {
+        margin-bottom: 0;
+        font-size: 0.8rem;
+      }
+
+      .share-modal-content {
+        padding: 1.2rem;
+      }
+
+      .share-stats {
+        grid-template-columns: 1fr;
+        gap: 0.5rem;
+      }
+
+      .share-platforms {
+        grid-template-columns: 1fr;
+      }
+
+      textarea {
+        min-height: 120px;
+        font-size: 0.8rem;
+      }
+    }
+
+    /* For very small mobile devices */
+    @media (max-width: 320px) {
+      .arena-container {
+        padding: 0.8rem;
+      }
+
+      .panel-title {
+        font-size: 1.1rem;
+      }
+
+      .stat-box {
+        padding: 0.2rem 0.5rem;
+      }
+
+      .category-info p {
+        font-size: 0.7rem;
+      }
+
+      .submit-btn,
+      .share-btn {
+        padding: 0.7rem 1rem;
+        font-size: 0.8rem;
+      }
+    }
+
+    /* For large screens */
+    @media (min-width: 1600px) {
+      .arena-container {
+        max-width: 1400px;
+      }
+    }
+
+    /* Adjust for landscape mode on mobile devices */
+    @media (max-height: 500px) and (orientation: landscape) {
+      body {
+        align-items: flex-start;
+        padding: 1rem;
+      }
+
+      .arena-container {
+        margin: 1rem 0;
+      }
+
+      textarea {
+        min-height: 100px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="arena-container">
+    <!-- Left Panel -->
+    <div class="panel left-panel">
+      <div class="panel-header">
+        <h2 class="panel-title">Challenge Our AI Systems</h2>
+        <div class="stats-container">
+          <div class="stat-box">
+            <div class="stat-value"><i class="fas fa-star"></i> <span id="challenge-score">848</span></div>
+            <!-- <div class="stat-label">Points</div> -->
+          </div>
+          <div class="stat-box">
+            <div class="stat-value"><i class="fas fa-fire"></i> <span id="challenge-streak">6</span></div>
+            <!-- <div class="stat-label">Streak</div> -->
+          </div>
+        </div>
+      </div>
+
+      <div class="categories-container">
+        <div class="categories-grid">
+          <button class="category-btn active" data-category="creative">
+            <i class="fas fa-brain"></i>
+            <span>Creative</span>
+          </button>
+          <button class="category-btn" data-category="logical">
+            <i class="fas fa-bullseye"></i>
+            <span>Logical</span>
+          </button>
+          <button class="category-btn" data-category="wordplay">
+            <i class="fas fa-comment"></i>
+            <span>Wordplay</span>
+          </button>
+          <button class="category-btn" data-category="trivia">
+            <i class="fas fa-trophy"></i>
+            <span>Trivia</span>
+          </button>
+        </div>
+
+        <div class="category-info">
+          <p id="category-description">Test our AI with creative challenges</p>
+        </div>
+      </div>
+
+      <div class="challenge-input">
+        <textarea id="challenge-prompt" placeholder="Create a challenge that might stump our AI..."></textarea>
+      </div>
+
+      <div class="action-buttons">
+        <button id="challenge-submit" class="submit-btn">
+          <i class="fas fa-bolt"></i> Try to Beat the AI
+        </button>
+        <button id="share-btn" class="share-btn">
+          <i class="fas fa-share"></i> Share
+        </button>
+      </div>
+    </div>
+
+    <!-- Right Panel -->
+    <div class="panel right-panel">
+      <div class="arena-ai-response">
+        <div class="response-header">
+          <i class="fas fa-robot"></i>
+          <h3 class="response-title">AI Response</h3>
+        </div>
+        <div class="response-content">
+          <p id="response-text">Submit a challenge to see how the AI responds!</p>
+        </div>
+      </div>
+
+      <div class="achievements-section">
+        <div class="section-header">
+          <i class="fas fa-award"></i>
+          <h3 class="section-title">Your Achievements</h3>
+        </div>
+        <div class="achievements-grid">
+          <div class="achievement-item">
+            <i class="fas fa-star"></i>
+            <div class="achievement-name">First Challenge</div>
+          </div>
+          <div class="achievement-item">
+            <i class="fas fa-fire"></i>
+            <div class="achievement-name">3-Day Streak</div>
+          </div>
+          <div class="achievement-item">
+            <i class="fas fa-trophy"></i>
+            <div class="achievement-name">500 Points</div>
+          </div>
+          <div class="achievement-item">
+            <i class="fas fa-crown"></i>
+            <div class="achievement-name">Top 10</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="leaderboard-section">
+        <div class="section-header">
+          <i class="fas fa-crown"></i>
+          <h3 class="section-title">Top Challengers</h3>
+        </div>
+        <div class="leaderboard-list">
+          <div class="leaderboard-item">
+            <span>🥇 CreativeGenius</span>
+            <span>2,450 pts</span>
+          </div>
+          <div class="leaderboard-item">
+            <span>🥈 LogicMaster</span>
+            <span>2,100 pts</span>
+          </div>
+          <div class="leaderboard-item">
+            <span>🥉 WordWizard</span>
+            <span>1,875 pts</span>
+          </div>
+          <div class="leaderboard-item user-item">
+            <span>🎯 You</span>
+            <span id="user-score">848 pts</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Share Modal -->
+  <div class="share-modal" id="share-modal">
+    <div class="share-modal-content">
+      <div class="share-modal-header">
+        <h2 class="share-modal-title">Share Your Achievement</h2>
+        <button class="close-modal" id="close-share-modal">&times;</button>
+      </div>
+
+      <div class="share-stats">
+        <div class="stat-card">
+          <div class="stat-value-modal" id="share-score">848</div>
+          <div class="stat-label-modal">Points Earned</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value-modal" id="share-streak">6</div>
+          <div class="stat-label-modal">Current Streak</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value-modal" id="share-category">Creative</div>
+          <div class="stat-label-modal">Category</div>
+        </div>
+      </div>
+
+      <div class="share-platforms">
+        <button class="platform-btn twitter" data-platform="twitter">
+          <i class="fab fa-twitter"></i> Twitter
+        </button>
+        <button class="platform-btn facebook" data-platform="facebook">
+          <i class="fab fa-facebook"></i> Facebook
+        </button>
+        <button class="platform-btn linkedin" data-platform="linkedin">
+          <i class="fab fa-linkedin"></i> LinkedIn
+        </button>
+        <button class="platform-btn copy-link" data-platform="copy">
+          <i class="fas fa-link"></i> Copy Link
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // State management
+    const state = {
+      challengeScore: 848,
+      challengeStreak: 6,
+      totalChallenges: 0,
+      lastPointsEarned: 0,
+      achievements: [],
+      challengeCategory: 'creative',
+      challengeResult: '',
+      showPointsAnimation: false
+    };
+
+    // DOM elements
+    const elements = {
+      challengeScore: document.getElementById('challenge-score'),
+      challengeStreak: document.getElementById('challenge-streak'),
+      challengePrompt: document.getElementById('challenge-prompt'),
+      challengeSubmit: document.getElementById('challenge-submit'),
+      shareBtn: document.getElementById('share-btn'),
+      categoryDescription: document.getElementById('category-description'),
+      responseText: document.getElementById('response-text'),
+      leaderboardUser: document.getElementById('user-score'),
+      shareModal: document.getElementById('share-modal'),
+      closeShareModal: document.getElementById('close-share-modal'),
+      shareScore: document.getElementById('share-score'),
+      shareStreak: document.getElementById('share-streak'),
+      shareCategory: document.getElementById('share-category')
+    };
+
+    // Category descriptions
+    const descriptions = {
+      creative: "Test our AI with creative challenges",
+      logical: "Challenge AI with logic puzzles",
+      wordplay: "See if AI can keep up with your word games",
+      trivia: "Stump the AI with trivia knowledge"
+    };
+
+    // Category responses
+    const categoryResponses = {
+      creative: [
+        "Wow! You stumped our AI with that creative challenge. You beat the AI! 🎉",
+        "Great creative thinking! Our AI handled it well, but you showed impressive creativity.",
+        "Nice creative attempt! Our AI was ready for that one. Try something even more creative!"
+      ],
+      logical: [
+        "Excellent! You found a logical puzzle that stumped our AI. You're a logic master! 🧠",
+        "Smart logical challenge! Our AI solved it, but your reasoning was impressive.",
+        "Good logical thinking! Our AI cracked that one. Can you think of something trickier?"
+      ],
+      wordplay: [
+        "Brilliant wordplay! You outsmarted our AI with that clever twist. You win! 🏆",
+        "Clever wordplay! Our AI caught that, but you showed great linguistic creativity.",
+        "Nice wordplay attempt! Our AI was prepared for that. Try a more complex word puzzle!"
+      ],
+      trivia: [
+        "Amazing! You know something our AI doesn't. You beat the AI with that trivia! 🎯",
+        "Impressive knowledge! Our AI knew that too, but great trivia challenge.",
+        "Good trivia question! Our AI had that covered. Try something more obscure!"
+      ]
+    };
+
+    // Initialize the application
+    function init() {
+      setupEventListeners();
+      updateUI();
+    }
+
+    // Set up event listeners
+    function setupEventListeners() {
+      // Category buttons
+      document.querySelectorAll('.category-btn').forEach(button => {
+        button.addEventListener('click', () => {
+          document.querySelectorAll('.category-btn').forEach(b => b.classList.remove('active'));
+          button.classList.add('active');
+          state.challengeCategory = button.dataset.category;
+          elements.categoryDescription.textContent = descriptions[state.challengeCategory];
+        });
+      });
+
+      // Challenge input
+      elements.challengePrompt.addEventListener('input', () => {
+        elements.challengeSubmit.disabled = !elements.challengePrompt.value.trim();
+      });
+
+      // Submit challenge
+      elements.challengeSubmit.addEventListener('click', handleChallengeSubmit);
+
+      // Share button
+      elements.shareBtn.addEventListener('click', showShareModal);
+
+      // Close share modal
+      elements.closeShareModal.addEventListener('click', hideShareModal);
+
+      // Platform share buttons
+      document.querySelectorAll('.platform-btn').forEach(button => {
+        button.addEventListener('click', () => {
+          const platform = button.dataset.platform;
+          handleShare(platform);
+        });
+      });
+
+      // Close modal when clicking outside
+      window.addEventListener('click', (event) => {
+        if (event.target === elements.shareModal) {
+          hideShareModal();
+        }
+      });
+    }
+
+    // Show share modal
+    function showShareModal() {
+      elements.shareScore.textContent = state.challengeScore;
+      elements.shareStreak.textContent = state.challengeStreak;
+      elements.shareCategory.textContent = state.challengeCategory.charAt(0).toUpperCase() + state.challengeCategory.slice(1);
+      elements.shareModal.style.display = 'flex';
+    }
+
+    // Hide share modal
+    function hideShareModal() {
+      elements.shareModal.style.display = 'none';
+    }
+
+    // Handle challenge submission
+    function handleChallengeSubmit() {
+      const prompt = elements.challengePrompt.value.trim();
+      if (!prompt) return;
+
+      // Disable button while processing
+      elements.challengeSubmit.disabled = true;
+      elements.challengeSubmit.innerHTML = '<i class="fas fa-brain"></i> AI is thinking...';
+
+      // Simulate AI processing
+      setTimeout(() => {
+        processChallengeResult(prompt);
+        elements.challengeSubmit.disabled = false;
+        elements.challengeSubmit.innerHTML = '<i class="fas fa-bolt"></i> Try to Beat the AI';
+      }, 1500);
+    }
+
+    // Process challenge result
+    function processChallengeResult(prompt) {
+      const difficulty = Math.random();
+      let result = "";
+      let points = 0;
+
+      const responses = categoryResponses[state.challengeCategory] || categoryResponses.creative;
+
+      if (difficulty > 0.6) {
+        result = responses[0];
+        points = 50;
+        state.challengeStreak += 1;
+      } else if (difficulty > 0.3) {
+        result = responses[1];
+        points = 25;
+        state.challengeStreak += 1;
+      } else {
+        result = responses[2];
+        points = 10;
+        state.challengeStreak = 0;
+      }
+
+      // Update state
+      state.challengeResult = result;
+      state.challengeScore += points;
+      state.lastPointsEarned = points;
+      state.totalChallenges += 1;
+
+      // Enable share button if score > 0
+      elements.shareBtn.disabled = state.challengeScore <= 0;
+
+      // Clear input
+      elements.challengePrompt.value = "";
+
+      // Update UI
+      updateUI();
+    }
+
+    // Handle share action
+    function handleShare(platform) {
+      const shareText = `I just scored ${state.challengeScore} points challenging AI systems in the ${state.challengeCategory} category! 🚀 
+Current streak: ${state.challengeStreak} challenges
+
+Test your skills against our AI systems!`;
+
+      const shareUrl = window.location.href;
+
+      switch (platform) {
+        case "twitter":
+          window.open(
+            `https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}&url=${encodeURIComponent(shareUrl)}`,
+            "_blank"
+          );
+          break;
+        case "facebook":
+          window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(shareUrl)}`, "_blank");
+          break;
+        case "linkedin":
+          window.open(`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(shareUrl)}`, "_blank");
+          break;
+        case "copy":
+          navigator.clipboard.writeText(`${shareText}\n\n${shareUrl}`);
+          alert("Score and link copied to clipboard! 📋");
+          break;
+      }
+
+      hideShareModal();
+    }
+
+    // Update UI based on state
+    function updateUI() {
+      // Update scores and counts
+      elements.challengeScore.textContent = state.challengeScore;
+      elements.challengeStreak.textContent = state.challengeStreak;
+
+      // Update leaderboard
+      elements.leaderboardUser.textContent = `${state.challengeScore} pts`;
+
+      // Update AI response
+      if (state.challengeResult) {
+        document.querySelector('.arena-ai-response').classList.remove('hidden');
+        elements.responseText.textContent = state.challengeResult;
+      }
+    }
+
+    // Initialize the app when DOM is loaded
+    document.addEventListener('DOMContentLoaded', init);
+  </script>
+</body>
+
+</html>

@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Community Join</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Inter', sans-serif;
+    }
+
+    body {
+      background: #010101;
+      color: #fff;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 60px 20px;
+    }
+
+    .community-wrapper {
+      width: 100%;
+      max-width: 1200px;
+    }
+
+    /* Section header */
+    .section-header {
+      text-align: center;
+      margin-bottom: 50px;
+    }
+
+    .section-header h2 {
+      font-size: 2rem;
+      font-weight: 700;
+      background: linear-gradient(90deg, #5C3DF3, #DD0D49);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 12px;
+    }
+
+    .section-header p {
+      font-size: 1rem;
+      color: #aaa;
+      max-width: 600px;
+      margin: 0 auto;
+      line-height: 1.6;
+    }
+
+    /* New Layout */
+    .community-section {
+      display: flex;
+      flex-direction: column;
+      gap: 40px;
+    }
+
+    /* 3 Cards in one row */
+    .benefits-row {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+    }
+
+    @media(max-width:950px) {
+      .benefits-row {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .benefit-card {
+      /* background: rgba(255, 255, 255, 0.02); */
+      /* border: 1px solid rgba(255, 255, 255, 0.1); */
+      border-radius: 18px;
+      padding: 24px;
+      text-align: left;
+      transition: border 0.3s, transform 0.3s;
+    }
+
+    .benefit-card:hover {
+      transform: translateY(-4px);
+    }
+
+    .benefit-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 12px;
+      background: linear-gradient(135deg, #5C3DF3, #DD0D49);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 12px;
+    }
+
+    .benefit-icon i {
+      color: #fff;
+      font-size: 1rem;
+    }
+
+    .benefit-title {
+      font-size: 1rem;
+      font-weight: 600;
+      margin-bottom: 6px;
+    }
+
+    .benefit-description {
+      font-size: 0.85rem;
+      color: #aaa;
+      line-height: 1.5;
+    }
+.newsletter-card {
+  position: relative;
+  overflow: hidden; /* make sure blur doesn't spill outside */
+  /* border: 1px solid rgba(255, 255, 255, 0.1); */
+  border-radius: 24px;
+  padding: 40px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  text-align: center;
+  transition: transform 0.3s;
+  z-index: 1;
+}
+
+.newsletter-card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: url("emailbg.jpg");
+  background-size: cover;
+  background-position: left;
+  background-repeat: no-repeat;
+  filter: blur(8px);
+  transform: scale(1); /* prevents blur edges from showing */
+  z-index: -1; 
+  opacity: 1;
+}
+
+
+    .newsletter-card:hover {
+      transform: translateY(-4px);
+    }
+
+    .newsletter-icon {
+      width: 50px;
+      height: 50px;
+      border-radius: 16px;
+      background: linear-gradient(135deg, #5C3DF3, #DD0D49);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 20px;
+    }
+
+    .newsletter-icon i {
+      color: #ffffff;
+      font-size: 1.6rem;
+    }
+
+    .newsletter-title {
+      font-size: 1.6rem;
+      font-weight: 500;
+      margin-bottom: 10px;
+    }
+
+    .newsletter-description {
+      color: #aaa;
+      margin-bottom: 24px;
+      font-size: 0.9rem;
+    }
+
+    .newsletter-form {
+      display: flex;
+      /* gap: 12px; */
+      width: 360px;
+      padding-bottom: 20px;
+      margin: auto;
+    }
+
+    @media(max-width:600px) {
+      .newsletter-form {
+        flex-direction: column;
+      }
+    }
+
+    .newsletter-input {
+      /* flex: 1; */
+      margin: auto;
+      /* width: 100px; */
+      padding: 14px 16px;
+      border-radius: 12px;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      background: #1f1f1f;
+      color: #fff;
+      font-size: 1rem;
+    }
+
+    .newsletter-input:focus {
+      outline: none;
+      border-color: #eee;
+    }
+
+    .newsletter-button {
+      padding: 14px 24px;
+      border: none;
+      border-radius: 8px;
+      font-weight: 400;
+      font-size: 1rem;
+      cursor: pointer;
+      background: linear-gradient(90deg, #5C3DF3, #DD0D49);
+      color: #fff;
+      transition: transform 0.3s, box-shadow 0.3s;
+    }
+
+    .newsletter-button:hover {
+      transform: translateY(-2px);
+    }
+
+    .newsletter-note {
+      font-size: 0.85rem;
+      color: #aaa;
+    }
+
+  .hidden {
+    display: none;
+  }
+
+  .success-message {
+    background: rgba(92, 61, 243, 0.1);
+    border: 1px solid #5C3DF3;
+    padding: 24px;
+    border-radius: 18px;
+    text-align: center;
+    margin-top: 20px;
+  }
+
+  .success-icon {
+    font-size: 2rem;
+    margin-bottom: 10px;
+    color: #5C3DF3;
+  }
+
+  </style>
+</head>
+
+<body>
+  <div class="community-wrapper">
+    <!-- Section Header -->
+    <div class="section-header">
+      <h2>Join Our Community</h2>
+      <p>Be part of the AI revolution and get exclusive updates.</p>
+    </div>
+
+    <!-- Content -->
+    <section class="community-section">
+      <!-- Three cards row -->
+      <div class="benefits-row">
+        <div class="benefit-card">
+          <div class="benefit-icon"><i class="fas fa-star"></i></div>
+          <h3 class="benefit-title">Early Access</h3>
+          <p class="benefit-description">Get priority access to new features before anyone else.</p>
+        </div>
+        <div class="benefit-card">
+          <div class="benefit-icon"><i class="fas fa-brain"></i></div>
+          <h3 class="benefit-title">Shape the Future</h3>
+          <p class="benefit-description">Your insights directly guide our AI development.</p>
+        </div>
+        <div class="benefit-card">
+          <div class="benefit-icon"><i class="fas fa-comments"></i></div>
+          <h3 class="benefit-title">Connect</h3>
+          <p class="benefit-description">Join a network of AI enthusiasts and innovators.</p>
+        </div>
+      </div>
+
+      <!-- Newsletter card under -->
+      <div class="newsletter-card">
+        <div class="newsletter-icon"><i class="fas fa-envelope"></i></div>
+        <h3 class="newsletter-title">Stay Updated</h3>
+        <p class="newsletter-description">Join the waitlist and receive exclusive launch updates.</p>
+
+        <div id="subscription-form">
+          <form class="newsletter-form" id="email-form">
+            <input type="email" class="newsletter-input" id="email-input" placeholder="Enter your email" required>
+            <button type="submit" class="newsletter-button" id="subscribe-button">Subscribe</button>
+          </form>
+          <p class="newsletter-note">We respect your privacy. No spam, ever.</p>
+        </div>
+
+       <div id="success-message" class="hidden">
+  <div class="success-message">
+    <div class="success-icon">✓</div>
+    <h3>You're In!</h3>
+    <p>Thanks for subscribing! You'll be the first to know when we launch.</p>
+    <p class="change-email" id="change-email" style="color:#5C3DF3;cursor:pointer;">
+      Subscribe with a different email
+    </p>
+  </div>
+</div>
+
+    </section>
+  </div>
+
+  <script>
+    
+    const emailForm = document.getElementById("email-form");
+    const emailInput = document.getElementById("email-input");
+    const subscribeButton = document.getElementById("subscribe-button");
+    const subscriptionForm = document.getElementById("subscription-form");
+    const successMessage = document.getElementById("success-message");
+    const changeEmail = document.getElementById("change-email");
+
+    emailForm.addEventListener("submit", function (e) {
+      e.preventDefault();
+      const email = emailInput.value.trim();
+      const emailPattern = /^[^ ]+@[^ ]+\.[a-z]{2,3}$/;
+      if (!email.match(emailPattern)) {
+        alert("Please enter a valid email");
+        return;
+      }
+      subscribeButton.disabled = true;
+      subscribeButton.textContent = "Subscribing...";
+      setTimeout(() => {
+        subscriptionForm.classList.add("hidden");
+        successMessage.classList.remove("hidden");
+        emailInput.value = "";
+        subscribeButton.disabled = false;
+        subscribeButton.textContent = "Subscribe";
+      }, 1200);
+    });
+
+    changeEmail.addEventListener("click", () => {
+      successMessage.classList.add("hidden");
+      subscriptionForm.classList.remove("hidden");
+    });
+  </script>
+</body>
+</html>

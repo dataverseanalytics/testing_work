@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Agent Product Showcase</title>
+    <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', sans-serif;
+        }
+
+        body {
+            background: #010101;
+            color: #fff;
+            padding: 2rem;
+            min-height: 100vh;
+        }
+
+        .product-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .product-showcase {
+    display: flex;
+    border-radius: 24px;
+    overflow: hidden;
+    height: 600px;
+    background: #222; 
+    box-shadow: 
+        inset 0 8px 20px rgba(255, 255, 255, 0.07),  /* light at top */
+        inset 0 -8px 20px rgba(0, 0, 0, 0.6),        /* shadow at bottom */
+        0 10px 25px rgba(0, 0, 0, 0.6);              /* outer drop shadow */
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+        .left-section {
+            width: 70%;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .right-section {
+            width: 30%;
+            border-left: 1px solid rgba(255, 255, 255, .2);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .top-left,
+        .bottom-left {
+            height: 50%;
+            display: flex;
+            border-bottom: 1px solid rgba(255, 255, 255, .2);
+        }
+
+        .bottom-left {
+            border-bottom: none;
+        }
+
+        .product-content {
+            width: 50%;
+            padding: 2rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .animation {
+            width: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+        }
+
+        .right-content {
+            padding: 2rem;
+            text-align: center;
+        }
+
+        .right-animation {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+        }
+
+        .product-container h2 {
+            font-size: 1.8rem;
+            margin-bottom: 1rem;
+        }
+
+        .product-content p {
+            color: rgba(255, 255, 255, .8);
+            line-height: 1.6;
+        }
+
+        lottie-player {
+            max-width: 100%;
+            max-height: 100%;
+        }
+
+        @media(max-width:900px) {
+            .product-showcase {
+                flex-direction: column;
+                height: auto;
+            }
+
+            .left-section,
+            .right-section {
+                width: 100%;
+            }
+
+            .right-section {
+                border-left: none;
+                border-top: 1px solid rgba(255, 255, 255, .2);
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="product-container">
+        <div class="product-showcase">
+            <!-- Left Section -->
+            <div class="left-section">
+                <!-- Calling Agent -->
+                <div class="top-left">
+                    <div class="product-content">
+                        <h2>Calling Agent</h2>
+                        <p>Our AI calling agent can handle customer calls with natural speech, emotional intelligence,
+                            and problem-solving. Perfect for support, scheduling, and lead qualification.</p>
+                    </div>
+                    <div class="animation">
+                        <lottie-player src="calling.json" background="transparent" speed="1"
+                            style="width:100%; height:100%;" loop autoplay>
+                        </lottie-player>
+                    </div>
+                </div>
+                <!-- Video Agent -->
+                <div class="bottom-left">
+                    <div class="animation">
+                        <lottie-player src="video.json" background="transparent" speed="1"
+                            style="width:100%; height:100%;" loop autoplay>
+                        </lottie-player>
+                    </div>
+                    <div class="product-content">
+                        <h2>Video Agent</h2>
+                        <p>Create realistic AI-generated video avatars. Perfect for presentations, training, and
+                            personalized messages in multiple languages.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Section (Text Agent) -->
+            <div class="right-section">
+                <div class="right-content">
+                    <h2>Text Agent</h2>
+                    <p>AI-powered text agent that understands context and provides human-like responses for customer
+                        service, chatbots, and content generation.</p>
+                </div>
+                <div class="right-animation">
+                    <lottie-player src="ai2.json" background="transparent" speed="1" style="width:100%; height:100%;"
+                        loop autoplay>
+                    </lottie-player>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
